@@ -1,0 +1,13 @@
+author: Thaddeus Jiang
+created: 20250812060042429
+description: TiddlyWiki Plugin Nowledge
+list: readme license history
+modified: 20250812060150235
+plugin-type: plugin
+source: https://github.com/ThaddeusJiang/tw-nowledge
+tags: 
+title: $:/plugins/ThaddeusJiang/Nowledge
+type: application/json
+version: 0.0.1
+
+{"tiddlers": {}}

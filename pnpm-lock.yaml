@@ -1,0 +1,35 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      tiddlywiki:
+        specifier: '>=5.1.20'
+        version: 5.3.8
+      tw5-thirdflow:
+        specifier: '>=1.2.10'
+        version: 1.2.11
+
+packages:
+
+  tiddlywiki@5.3.8:
+    resolution: {integrity: sha512-T25acZfdhAX/lUVPY/9SXo7bMJKgSaMs5PDOb83S2WKbTCD7DnOUQ4aC3qDy0j5XqlCn4ih3mzMWct3xnQx+Mw==}
+    engines: {node: '>=0.8.2'}
+    hasBin: true
+
+  tw5-thirdflow@1.2.11:
+    resolution: {integrity: sha512-BQdSuGNX2q+kiU3hAspKO3kIOSbe6B6KDHj1Zq/NYg54ZCMe0ck3Gm860BCTBxbp05ogRxHTalB61vj5Tsx2xQ==}
+    engines: {node: '>=4.6.0'}
+
+snapshots:
+
+  tiddlywiki@5.3.8: {}
+
+  tw5-thirdflow@1.2.11:
+    dependencies:
+      tiddlywiki: 5.3.8

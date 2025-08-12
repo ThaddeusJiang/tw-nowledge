@@ -16,11 +16,11 @@
   ],
   "main": "main.js",
   "scripts": {
-    "dev": "tiddlywiki editions/develop --verbose --server 8080 $:/core/save/all text/plain text/html",
+    "dev": "tiddlywiki editions/develop --verbose --listen port=8080",
     "build": "tiddlywiki editions/release --verbose --build release",
-    "start": "tiddlywiki editions/develop --verbose --server 8080 $:/core/save/all text/plain text/html & echo $! > tw.pid",
+    "start": "tiddlywiki editions/develop --verbose --listen port=8080 & echo $! > tw.pid",
     "stop": "kill `cat tw.pid` && rm tw.pid",
-    "winstart": "start \"TW5 Plugin Develop\" cmd /c tiddlywiki editions/develop --verbose --server 8080 $:/core/save/all text/plain text/html",
+    "winstart": "start \"TW5 Plugin Develop\" cmd /c tiddlywiki editions/develop --verbose --listen port=8080",
     "winstop": "taskkill /fi \"WINDOWTITLE eq TW5 Plugin Develop\""
   },
   "dependencies": {

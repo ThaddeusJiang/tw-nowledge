@@ -1,10 +1,12 @@
 created: 20250812060149138
-modified: 20250812062632536
+modified: 20250812073802814
 tags: 
 title: $:/plugins/ThaddeusJiang/Nowledge/readme
 type: text/vnd.tiddlywiki
 
-! TiddlyWiki plugin for Nowledge
+! tw-nowledge
+
+Sync data with Nowledge
 
 !! Usage
 

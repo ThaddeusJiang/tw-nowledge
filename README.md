@@ -4,7 +4,7 @@ TiddlyWiki plugin for Nowledge
 
 ## Usage
 
-https://tw-nowledge.thaddeusjiang.github.io
+https://tw-nowledge.thaddeusjiang.com
 
 ## Develop
 

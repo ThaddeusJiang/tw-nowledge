@@ -1,13 +1,13 @@
 created: 20250812060149138
-modified: 20250812073802814
-tags: 
+modified: 20260110062843539
+tags:
 title: $:/plugins/ThaddeusJiang/Nowledge/readme
 type: text/vnd.tiddlywiki
 
 ! tw-nowledge
 
-Sync data with Nowledge
+Sync TiddlyWiki with Nowledge
 
 !! Usage
 
-visit [[https://tw-nowledge.thaddeusjiang.com]] Drag <<tag $:/plugins/ThaddeusJiang/Nowledge >> into your wiki.
+Drag <<tag $:/plugins/ThaddeusJiang/Nowledge >> into your wiki.

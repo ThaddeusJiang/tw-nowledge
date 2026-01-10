@@ -30,6 +30,6 @@ type: text/vnd.tiddlywiki
   method="POST"
 	header-content-type="application/json"
 	oncompletion=<<onCompletion>>
-  body=`{"content":"${ [<currentTiddler>get[text]jsonstringify[]] }$","title":"${ [<currentTiddler>get[title]jsonstringify[]] }$","source":"tiddlywiki","event_start":"${ [<currentTiddler>get[modified]format:date[YYYY-0MM-0DD]] }$"}`
+  body=`{"content":"${ [<currentTiddler>get[text]jsonstringify[]] }$","title":"${ [<currentTiddler>get[title]jsonstringify[]] }$","source":"tiddlywiki","event_start":"${ [<currentTiddler>get[modified]format:date[YYYY-0MM-0DD]] }$","labels":[${ [<currentTiddler>tags[]jsonstringify[]addprefix["]addsuffix["]join[,]] }$]}`
 />
 </$button>

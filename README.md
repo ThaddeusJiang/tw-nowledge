@@ -35,13 +35,13 @@ ni
 nr build
 ```
 
-Create configuration tiddlers when the defaults are not appropriate:
+The plugin provides these defaults as shadow tiddlers. Click a title to inspect it in TiddlyWiki. Editing creates a user override; deleting that override restores the plugin default.
 
 | Tiddler | Default |
 | --- | --- |
 | `$:/config/tw-nowledge/api-url` | `http://127.0.0.1:14242` |
 | `$:/config/tw-nowledge/space-id` | `default` |
-| `$:/config/tw-nowledge/wiki-id` | Identity derived from the wiki and browser location |
+| `$:/config/tw-nowledge/wiki-id` | `auto` (derived from the wiki and browser location) |
 | `$:/temp/tw-nowledge/api-key` | Empty; temporary only |
 
 Never persist the API key tiddler. When using the importer and plugin together, use the same Wiki identity here and with `tiddlynmem plan --wiki-id <id>`.

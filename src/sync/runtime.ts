@@ -15,6 +15,7 @@ const API_URL_CONFIG = "$:/config/tw-nowledge/api-url";
 const SPACE_ID_CONFIG = "$:/config/tw-nowledge/space-id";
 const WIKI_ID_CONFIG = "$:/config/tw-nowledge/wiki-id";
 const API_KEY_TIDDLER = "$:/temp/tw-nowledge/api-key";
+const AUTOMATIC_WIKI_ID = "auto";
 
 interface PluginEngine {
   inspect(title: string): Promise<SyncResult>;
@@ -46,6 +47,18 @@ function activeTitles(runtime: TiddlyWikiRuntime): string[] {
   return runtime.wiki.getTiddlerList(STORY_LIST);
 }
 
+export async function resolveWikiId(
+  configuredWikiId: string,
+  sourceWiki: string,
+  locationHref: string,
+): Promise<string> {
+  const selectedWikiId = configuredWikiId.trim();
+  if (selectedWikiId && selectedWikiId !== AUTOMATIC_WIKI_ID) {
+    return selectedWikiId;
+  }
+  return stableMemoryId("tw-nowledge-wiki", `${sourceWiki}\0${locationHref}`);
+}
+
 async function defaultEngineFactory(
   runtime: TiddlyWikiRuntime,
   repository: TiddlyWikiRepository,
@@ -56,11 +69,9 @@ async function defaultEngineFactory(
   );
   const spaceId = runtime.wiki.getTiddlerText(SPACE_ID_CONFIG, "default").trim() || "default";
   const sourceWiki = runtime.wiki.getTiddlerText("$:/SiteTitle", "TiddlyWiki").trim() || "TiddlyWiki";
-  const configuredWikiId = runtime.wiki.getTiddlerText(WIKI_ID_CONFIG, "").trim();
+  const configuredWikiId = runtime.wiki.getTiddlerText(WIKI_ID_CONFIG, AUTOMATIC_WIKI_ID);
   const locationHref = options.locationHref ?? globalThis.location?.href ?? "tiddlywiki://local";
-  const wikiId =
-    configuredWikiId ||
-    (await stableMemoryId("tw-nowledge-wiki", `${sourceWiki}\0${locationHref}`));
+  const wikiId = await resolveWikiId(configuredWikiId, sourceWiki, locationHref);
   const remote = new NmemClient({
     apiKey: runtime.wiki.getTiddlerText(API_KEY_TIDDLER, ""),
     apiUrl,

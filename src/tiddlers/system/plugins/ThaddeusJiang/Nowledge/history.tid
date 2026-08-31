@@ -4,5 +4,5 @@ tags:
 title: $:/plugins/ThaddeusJiang/Nowledge/history
 type: text/vnd.tiddlywiki
 
-* ''0.1.0'' -- Add active-tiddler-only bidirectional synchronization, importer-compatible mapping fields and digests, format-preserving pulls, and explicit conflict status.
+* ''0.1.0'' -- Add active-tiddler-only bidirectional synchronization, importer-compatible mapping fields and digests, format-preserving pulls, explicit conflict status, and overridable shadow configuration defaults.
 * ''0.0.1'' -- Initial one-way import button.

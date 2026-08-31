@@ -4,11 +4,19 @@ import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { prepareConfigurationDefaultsLibrary } from "./configuration-defaults.ts";
 import { prepareMarkdownTransformerLibrary } from "./markdown-transformer.ts";
 
 interface PluginFile {
   tiddlers: Record<string, Record<string, string>>;
 }
+
+const expectedConfigurationDefaults = {
+  "$:/config/tw-nowledge/api-url": "http://127.0.0.1:14242",
+  "$:/config/tw-nowledge/space-id": "default",
+  "$:/config/tw-nowledge/wiki-id": "auto",
+  "$:/temp/tw-nowledge/api-key": "",
+} as const;
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const packageJson = JSON.parse(
@@ -51,6 +59,13 @@ assert.ok(
   "The plugin readme must link to Markdown Transformer instead of transcluding its package JSON.",
 );
 
+for (const [title, text] of Object.entries(expectedConfigurationDefaults)) {
+  const configuration = plugin.tiddlers[title];
+  assert.ok(configuration, `The packaged plugin must provide the ${title} shadow tiddler.`);
+  const actualText = configuration.text ?? "";
+  assert.equal(text ? actualText.trim() : actualText, text);
+}
+
 assert.ok(
   !Object.keys(plugin.tiddlers).some((title) =>
     title.startsWith("$:/plugins/linonetwo/markdown-transformer"),
@@ -89,7 +104,37 @@ assert.ok(
 const developmentWiki = JSON.parse(
   await readFile(resolve(projectRoot, "editions/develop/tiddlywiki.info"), "utf8"),
 ) as { plugins?: string[] };
+assert.ok(developmentWiki.plugins?.includes("ThaddeusJiang/tw-nowledge-defaults"));
 assert.ok(developmentWiki.plugins?.includes("linonetwo/markdown-transformer"));
+
+const configurationDefaultsLibrary = await prepareConfigurationDefaultsLibrary();
+const configurationDefaultsPlugin = JSON.parse(
+  await readFile(
+    resolve(
+      configurationDefaultsLibrary,
+      "ThaddeusJiang/tw-nowledge-defaults/plugin.info",
+    ),
+    "utf8",
+  ),
+) as PluginFile & { title?: string };
+assert.equal(
+  configurationDefaultsPlugin.title,
+  "$:/plugins/ThaddeusJiang/tw-nowledge-defaults",
+);
+for (const [title, text] of Object.entries(expectedConfigurationDefaults)) {
+  assert.equal(configurationDefaultsPlugin.tiddlers[title]?.text ?? "", text);
+}
+for (const relativePath of [
+  "src/tiddlers/system/config/tw-nowledge/api-url.tid",
+  "src/tiddlers/system/config/tw-nowledge/space-id.tid",
+  "src/tiddlers/system/config/tw-nowledge/wiki-id.tid",
+  "src/tiddlers/system/temp/tw-nowledge/api-key.tid",
+]) {
+  assert.ok(
+    !existsSync(resolve(projectRoot, relativePath)),
+    `${relativePath} must be a plugin shadow, not an ordinary source tiddler.`,
+  );
+}
 assert.ok(
   !existsSync(
     resolve(

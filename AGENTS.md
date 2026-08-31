@@ -15,6 +15,7 @@ This repository is the standalone TiddlyWiki plugin for bidirectional synchroniz
 - Keep the production `Nowledge.tid` independent: it must declare Markdown Transformer as an external dependency and must not contain Markdown Transformer or `md-to-tid` tiddlers.
 - Preserve the source `modified` value when writing synchronization fields or a remote body. Reject a concurrent source change rather than overwriting it.
 - Read browser credentials only from `$:/temp/tw-nowledge/api-key`. Never persist them, include them in a URL, follow redirects, or expose credentials or raw API bodies in errors.
+- Package configuration defaults as shadow tiddlers. User edits override them, and deleting an override must restore the plugin default. Treat `auto` or an empty Wiki identity as the derived identity mode.
 - Keep Memory request metadata, deterministic IDs, and `nmem-digest` compatible with `tiddlynmem`. `nmem-local-digest` is plugin-owned and tracks the local source representation.
 
 ## Source and build

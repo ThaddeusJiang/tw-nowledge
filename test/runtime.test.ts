@@ -1,9 +1,30 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { startPluginRuntime, statusTiddlerTitle } from "../src/sync/runtime.ts";
+import {
+  resolveWikiId,
+  startPluginRuntime,
+  statusTiddlerTitle,
+} from "../src/sync/runtime.ts";
+import { stableMemoryId } from "../src/sync/protocol.ts";
 import type { SyncEngine, SyncResult } from "../src/sync/engine.ts";
 import type { TiddlerFields, TiddlyWikiRuntime } from "../src/sync/tiddlywiki-adapter.ts";
+
+test("uses auto and empty Wiki identity defaults until the user overrides them", async () => {
+  const sourceWiki = "My Wiki";
+  const locationHref = "https://example.test/wiki.html";
+  const derived = await stableMemoryId(
+    "tw-nowledge-wiki",
+    `${sourceWiki}\0${locationHref}`,
+  );
+
+  assert.equal(await resolveWikiId("auto", sourceWiki, locationHref), derived);
+  assert.equal(await resolveWikiId("", sourceWiki, locationHref), derived);
+  assert.equal(
+    await resolveWikiId("portable-wiki-id", sourceWiki, locationHref),
+    "portable-wiki-id",
+  );
+});
 
 test("runtime checks only StoryList tiddlers and refuses closed-title messages", async () => {
   let storyTitles = ["Open"];

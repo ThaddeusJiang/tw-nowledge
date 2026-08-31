@@ -42,6 +42,10 @@ The Memory request remains compatible with `tiddlynmem`: deterministic UUID, `so
 
 The Markdown transformer is a required peer TiddlyWiki plugin and is not bundled or redistributed by `tw-nowledge`.
 
+## Configuration defaults
+
+The plugin packages its API URL, space, Wiki identity, and temporary API key defaults as shadow tiddlers. Editing a default creates an ordinary tiddler with the same title that overrides the shadow; deleting that override restores the packaged default. The default Wiki identity value is `auto`, which derives the identity from the Wiki and browser location. An empty Wiki identity keeps the same automatic behavior for backwards compatibility.
+
 ## Safety constraints
 
 - Reverse sync is explicit and per tiddler. It reads only the Memory named by a valid `nmem-uri`.
@@ -60,3 +64,4 @@ The Markdown transformer is a required peer TiddlyWiki plugin and is not bundled
 5. A two-sided edit reports `conflict` and modifies neither side.
 6. A linked tiddler outside `$:/StoryList` performs no remote read.
 7. The packaged plugin declares the Markdown transformer dependency and contains no bundled copy of it.
+8. Packaged configuration defaults are shadow tiddlers; a user override takes precedence and deleting it restores the default.

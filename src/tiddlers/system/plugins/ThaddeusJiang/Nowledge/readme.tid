@@ -17,9 +17,9 @@ Production installs require [[$:/plugins/linonetwo/markdown-transformer]] for Wi
 !! Configuration
 
 |Setting | Tiddler | Default |
-|Nowledge Mem API URL | `$:/config/tw-nowledge/api-url` | `http://127.0.0.1:14242` |
-|Space ID | `$:/config/tw-nowledge/space-id` | `default` |
-|Portable Wiki identity | `$:/config/tw-nowledge/wiki-id` | identity derived from the wiki and location |
-|Temporary API key | `$:/temp/tw-nowledge/api-key` | empty |
+|Nowledge Mem API URL | [[$:/config/tw-nowledge/api-url]] | `http://127.0.0.1:14242` |
+|Space ID | [[$:/config/tw-nowledge/space-id]] | `default` |
+|Portable Wiki identity | [[$:/config/tw-nowledge/wiki-id]] | `auto` (derived from the wiki and location) |
+|Temporary API key | [[$:/temp/tw-nowledge/api-key]] | empty |
 
-The API key tiddler is temporary and must not be persisted. When using `tiddlynmem` and this plugin together, set the same Wiki identity here and pass it to the importer with `--wiki-id`.
+These defaults are shadow tiddlers. Editing one creates a user override; deleting the override restores the plugin default. The API key tiddler is temporary and must not be persisted. When using `tiddlynmem` and this plugin together, set the same Wiki identity here and pass it to the importer with `--wiki-id`.

@@ -16,7 +16,7 @@ Every saved, non-system tiddler has a Nowledge Mem toolbar button:
 
 Only tiddlers currently open in `$:/StoryList` are checked. The plugin never polls or scans closed tiddlers. Clicking the button performs a fresh remote check before any write.
 
-The plugin records `$:/NowledgeMem`, `nmem-uri`, and `nmem-digest`, using the same Memory request and digest contract as `tiddlynmem`. It also records `nmem-local-digest` so a Markdown-to-WikiText pull does not look like a new local edit merely because the conversion is not byte-reversible.
+The plugin records `nmem-uri` and `nmem-digest`, using the same Memory request and digest contract as `tiddlynmem`. It also records `nmem-tiddler-digest` so a Markdown-to-WikiText pull does not look like a new local edit merely because the conversion is not byte-reversible. The legacy `nmem-local-digest` field is a read-only fallback when the new field is absent; successful create, push, and pull operations write only `nmem-tiddler-digest`. Synchronization never adds, removes, or changes tiddler tags. The historical `$:/NowledgeMem` marker is ignored when an older importer-linked tiddler is synchronized.
 
 ## Formats
 

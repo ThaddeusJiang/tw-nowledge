@@ -3,8 +3,9 @@ import { gfm } from "turndown-plugin-gfm";
 
 import type { ContentConverter, TiddlerPatch, TiddlerRepository } from "./engine.ts";
 import {
+  LEGACY_NMEM_LOCAL_DIGEST_FIELD,
   NMEM_DIGEST_FIELD,
-  NMEM_LOCAL_DIGEST_FIELD,
+  NMEM_TIDDLER_DIGEST_FIELD,
   NMEM_URI_FIELD,
   type LocalTiddler,
 } from "./protocol.ts";
@@ -209,7 +210,9 @@ export class TiddlyWikiRepository implements TiddlerRepository {
       created: toIsoTimestamp(fields.created),
       modified: toIsoTimestamp(fields.modified),
       nmemDigest: fieldString(fields, NMEM_DIGEST_FIELD),
-      nmemLocalDigest: fieldString(fields, NMEM_LOCAL_DIGEST_FIELD),
+      nmemTiddlerDigest:
+        fieldString(fields, NMEM_TIDDLER_DIGEST_FIELD) ||
+        fieldString(fields, LEGACY_NMEM_LOCAL_DIGEST_FIELD),
       nmemUri: fieldString(fields, NMEM_URI_FIELD),
       revision,
       tags,
@@ -230,9 +233,10 @@ export class TiddlyWikiRepository implements TiddlerRepository {
     }
     const updates: TiddlerFields = {};
     if (patch.nmemDigest !== undefined) updates[NMEM_DIGEST_FIELD] = patch.nmemDigest;
-    if (patch.nmemLocalDigest !== undefined) updates[NMEM_LOCAL_DIGEST_FIELD] = patch.nmemLocalDigest;
+    if (patch.nmemTiddlerDigest !== undefined) {
+      updates[NMEM_TIDDLER_DIGEST_FIELD] = patch.nmemTiddlerDigest;
+    }
     if (patch.nmemUri !== undefined) updates[NMEM_URI_FIELD] = patch.nmemUri;
-    if (patch.tags !== undefined) updates.tags = patch.tags;
     if (patch.text !== undefined) updates.text = patch.text;
     if (patch.type !== undefined) updates.type = patch.type;
     this.#runtime.wiki.addTiddler(new this.#runtime.Tiddler(current.fields, updates));

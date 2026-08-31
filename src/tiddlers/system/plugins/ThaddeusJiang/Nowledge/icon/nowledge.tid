@@ -7,7 +7,7 @@ title: $:/plugins/ThaddeusJiang/Nowledge/icon/nowledge
 type: text/vnd.tiddlywiki
 
 \parameters (size:"22pt")
-[img width=<<size>> height=<<size>> class="tc-nowledge-button tc-image-button"  [$:/plugins/ThaddeusJiang/Nowledge/image/nowledge-icon-128.png]]
+[img width=<<size>> height=<<size>> class="tc-nowledge-button tc-image-button"  [$:/plugins/ThaddeusJiang/Nowledge/image/nmem.png]]
 
 <style>
 .tc-icon-wrapper > img {

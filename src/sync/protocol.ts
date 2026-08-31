@@ -2,16 +2,17 @@ const DNS_NAMESPACE = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
 const MEMORY_ID_PATTERN =
   "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[89ab][0-9a-f]{3}-[0-9a-f]{12}";
 
-export const NOWLEDGE_MEM_TAG = "$:/NowledgeMem";
+export const LEGACY_NOWLEDGE_MEM_TAG = "$:/NowledgeMem";
+export const LEGACY_NMEM_LOCAL_DIGEST_FIELD = "nmem-local-digest";
 export const NMEM_URI_FIELD = "nmem-uri";
 export const NMEM_DIGEST_FIELD = "nmem-digest";
-export const NMEM_LOCAL_DIGEST_FIELD = "nmem-local-digest";
+export const NMEM_TIDDLER_DIGEST_FIELD = "nmem-tiddler-digest";
 
 export interface LocalTiddler {
   created: string;
   modified: string;
   nmemDigest: string;
-  nmemLocalDigest: string;
+  nmemTiddlerDigest: string;
   nmemUri: string;
   revision: string;
   tags: string[];
@@ -125,7 +126,7 @@ export async function localSourceDigest(tiddler: LocalTiddler): Promise<string> 
     JSON.stringify({
       created: tiddler.created,
       modified: tiddler.modified,
-      tags: tiddler.tags.filter((tag) => tag !== NOWLEDGE_MEM_TAG),
+      tags: tiddler.tags.filter((tag) => tag !== LEGACY_NOWLEDGE_MEM_TAG),
       text: tiddler.text,
       title: tiddler.title,
       type: tiddler.type || "text/vnd.tiddlywiki",

@@ -1,5 +1,5 @@
 import {
-  NOWLEDGE_MEM_TAG,
+  LEGACY_NOWLEDGE_MEM_TAG,
   buildMemoryRequest,
   isMemoryDigest,
   localSourceDigest,
@@ -46,9 +46,8 @@ export interface ContentConverter {
 
 export interface TiddlerPatch {
   nmemDigest?: string;
-  nmemLocalDigest?: string;
+  nmemTiddlerDigest?: string;
   nmemUri?: string;
-  tags?: string[];
   text?: string;
   type?: string;
 }
@@ -106,10 +105,6 @@ function remoteMemoryInput(remote: RemoteMemory): MemoryInput {
   };
 }
 
-function withMarker(tags: string[]): string[] {
-  return tags.includes(NOWLEDGE_MEM_TAG) ? [...tags] : [...tags, NOWLEDGE_MEM_TAG];
-}
-
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : "Synchronization failed.";
 }
@@ -150,7 +145,7 @@ export class SyncEngine {
       id,
       modified: local.modified,
       sourceWiki: this.#identity.sourceWiki,
-      tags: local.tags.filter((tag) => tag !== NOWLEDGE_MEM_TAG),
+      tags: local.tags.filter((tag) => tag !== LEGACY_NOWLEDGE_MEM_TAG),
       title: local.title,
       wikiId: this.#identity.wikiId,
     };
@@ -184,11 +179,11 @@ export class SyncEngine {
       const localDigest = await localSourceDigest(local);
       const remoteMemory = remoteMemoryInput(remote);
       const remoteDigest = await memorySyncDigest(remoteMemory, this.#destination);
-      let localChanged = local.nmemLocalDigest
-        ? local.nmemLocalDigest !== localDigest
+      let localChanged = local.nmemTiddlerDigest
+        ? local.nmemTiddlerDigest !== localDigest
         : false;
       let localMemory: MemoryInput | undefined;
-      if (!local.nmemLocalDigest) {
+      if (!local.nmemTiddlerDigest) {
         localMemory = await this.#localMemory(local, memoryId);
         localChanged = (await memorySyncDigest(localMemory, this.#destination)) !== local.nmemDigest;
       }
@@ -214,9 +209,8 @@ export class SyncEngine {
   ): Promise<boolean> {
     return this.#repository.update(local.revision, {
       nmemDigest: await memorySyncDigest(memory, this.#destination),
-      nmemLocalDigest: localDigest,
+      nmemTiddlerDigest: localDigest,
       nmemUri: uri,
-      tags: withMarker(local.tags),
     });
   }
 
@@ -286,14 +280,12 @@ export class SyncEngine {
         !local.type || local.type === "text/vnd.tiddlywiki"
           ? await this.#converter.markdownToWikiText(remoteMemory.content)
           : remoteMemory.content;
-      const tags = withMarker(local.tags);
-      const localDigest = await localSourceDigest({ ...local, tags, text });
+      const localDigest = await localSourceDigest({ ...local, text });
       if (
         !this.#repository.update(local.revision, {
           nmemDigest: remoteDigest,
-          nmemLocalDigest: localDigest,
+          nmemTiddlerDigest: localDigest,
           nmemUri: local.nmemUri,
-          tags,
           text,
           type: local.type || "text/vnd.tiddlywiki",
         })

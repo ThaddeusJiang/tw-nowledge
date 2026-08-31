@@ -49,8 +49,61 @@ assert.ok(!/from ["'][^"']+\.ts["']/u.test(startup.text ?? ""));
 
 const button = plugin.tiddlers["$:/plugins/ThaddeusJiang/Nowledge/button/import-to-nowledge"];
 assert.ok(button);
-assert.match(button.text ?? "", /tm-nowledge-sync/u);
-assert.ok(!(button.text ?? "").includes("tm-http-request"));
+const buttonText = button.text ?? "";
+assert.match(buttonText, /tm-nowledge-sync/u);
+assert.ok(!buttonText.includes("tm-http-request"));
+
+for (const [state, image] of [
+  ["unlinked", "nmem.png"],
+  ["synced", "nmem-synced.svg"],
+  ["local-changed", "nmem-push.svg"],
+  ["remote-changed", "nmem-pull.svg"],
+  ["conflict", "nmem-conflict.svg"],
+  ["checking", "nmem.png"],
+  ["error", "nmem.png"],
+]) {
+  assert.match(
+    buttonText,
+    new RegExp(
+      `<\\$list filter="\\[<nowledgeState>match\\[${state}\\]\\]">\\s*<\\$image source="\\$:/plugins/ThaddeusJiang/Nowledge/image/${image}"`,
+      "u",
+    ),
+    `The ${state} button state must use ${image}.`,
+  );
+}
+
+for (const oldIndicator of ["＋", "✓", ">NEW<", ">OLD<"]) {
+  assert.ok(!buttonText.includes(oldIndicator), `The button must not contain ${oldIndicator}.`);
+}
+assert.ok(!buttonText.includes("tw-nowledge-state"));
+
+const baseIcon = plugin.tiddlers["$:/plugins/ThaddeusJiang/Nowledge/image/nmem.png"];
+assert.ok(baseIcon, "The packaged plugin must contain the base nmem icon.");
+assert.equal(baseIcon.type, "image/png");
+
+for (const title of [
+  "$:/plugins/ThaddeusJiang/Nowledge/image/nmem-synced.svg",
+  "$:/plugins/ThaddeusJiang/Nowledge/image/nmem-push.svg",
+  "$:/plugins/ThaddeusJiang/Nowledge/image/nmem-pull.svg",
+  "$:/plugins/ThaddeusJiang/Nowledge/image/nmem-conflict.svg",
+]) {
+  const statusIcon = plugin.tiddlers[title];
+  assert.ok(statusIcon, `The packaged plugin must contain ${title}.`);
+  assert.equal(statusIcon.type, "image/svg+xml");
+  assert.match(statusIcon.text ?? "", /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg"/u);
+  assert.match(statusIcon.text ?? "", /data:image\/png;base64,/u);
+}
+
+const syncedIcon = plugin.tiddlers["$:/plugins/ThaddeusJiang/Nowledge/image/nmem-synced.svg"];
+assert.match(syncedIcon?.text ?? "", /fill="#16803c"/u);
+
+for (const oldTitle of [
+  "$:/plugins/ThaddeusJiang/Nowledge/image/nowledge-icon-128.png",
+  "$:/plugins/ThaddeusJiang/Nowledge/image/nowledge-icon-check.svg",
+  "$:/plugins/ThaddeusJiang/Nowledge/image/nowledge-icon-yellow-dot.svg",
+]) {
+  assert.ok(!plugin.tiddlers[oldTitle], `The packaged plugin must not contain ${oldTitle}.`);
+}
 
 const readme = plugin.tiddlers["$:/plugins/ThaddeusJiang/Nowledge/readme"];
 assert.ok(readme);

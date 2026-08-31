@@ -8,15 +8,16 @@ This repository is the standalone TiddlyWiki plugin for bidirectional synchroniz
 - Only titles currently in `$:/StoryList` may trigger a remote check. Do not add polling, a background wiki scan, or remote discovery.
 - A button click always rechecks the exact linked Memory before changing either side.
 - The five stable states are `unlinked`, `synced`, `local-changed`, `remote-changed`, and `conflict`. `checking` and `error` are transient presentation states.
-- `unlinked` creates a deterministic Memory and writes `$:/NowledgeMem`, `nmem-uri`, `nmem-digest`, and `nmem-local-digest` only after the API confirms the requested Memory ID.
+- `unlinked` creates a deterministic Memory and writes `nmem-uri`, `nmem-digest`, and `nmem-tiddler-digest` only after the API confirms the requested Memory ID.
 - `synced` performs no write. `local-changed` upserts the existing Memory. `remote-changed` updates only the existing tiddler body and synchronization fields. `conflict` modifies neither side.
 - Reverse sync is explicit and per tiddler. Never create, rename, or delete tiddlers during a pull.
 - Preserve the tiddler type: Markdown and plain text are written directly; WikiText pulls use the public `md2tid` module from `$:/plugins/linonetwo/markdown-transformer`.
 - Keep the production `Nowledge.tid` independent: it must declare Markdown Transformer as an external dependency and must not contain Markdown Transformer or `md-to-tid` tiddlers.
 - Preserve the source `modified` value when writing synchronization fields or a remote body. Reject a concurrent source change rather than overwriting it.
+- Never add, remove, or change tiddler tags during synchronization. Ignore the historical `$:/NowledgeMem` marker when building Memory labels and source digests so older importer-linked tiddlers remain compatible.
 - Read browser credentials only from `$:/temp/tw-nowledge/api-key`. Never persist them, include them in a URL, follow redirects, or expose credentials or raw API bodies in errors.
 - Package configuration defaults as shadow tiddlers. User edits override them, and deleting an override must restore the plugin default. Treat `auto` or an empty Wiki identity as the derived identity mode.
-- Keep Memory request metadata, deterministic IDs, and `nmem-digest` compatible with `tiddlynmem`. `nmem-local-digest` is plugin-owned and tracks the local source representation.
+- Keep Memory request metadata, deterministic IDs, and `nmem-digest` compatible with `tiddlynmem`. `nmem-tiddler-digest` is plugin-owned and tracks one tiddler's local source representation. Read `nmem-local-digest` only as a legacy fallback when the new field is absent; never write the legacy field.
 
 ## Source and build
 
@@ -47,7 +48,7 @@ Tests use fake repositories and HTTP services. Never write to the user's real No
 Test behavior rather than implementation details, including:
 
 - importer-compatible fingerprint, destination digest, deterministic ID, request metadata, and response ID validation;
-- all five synchronization states and the legacy mapping fallback without `nmem-local-digest`;
+- all five synchronization states, importer mappings without a tiddler baseline, and the read-only legacy `nmem-local-digest` fallback;
 - no-op, create, push, format-preserving pull, conflict, and concurrent-edit rejection;
 - StoryList-only remote checks and closed-title message rejection;
 - safe API URL handling, Bearer authentication, redirect rejection, timeout behavior, and sanitized errors;

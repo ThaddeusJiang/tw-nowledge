@@ -68,9 +68,8 @@ test("writes mapping fields without changing modified or unrelated fields", () =
   assert.equal(
     repository.update(local.revision, {
       nmemDigest: `sha256:${"1".repeat(64)}`,
-      nmemLocalDigest: `sha256:${"2".repeat(64)}`,
+      nmemTiddlerDigest: `sha256:${"2".repeat(64)}`,
       nmemUri: "nowledgemem://memory/12345678-1234-5123-8123-123456789abc",
-      tags: ["alpha", "$:/NowledgeMem"],
     }),
     true,
   );
@@ -78,6 +77,23 @@ test("writes mapping fields without changing modified or unrelated fields", () =
   assert.equal(fake.fields().custom, "preserved");
   assert.equal((fake.fields().modified as Date).toISOString(), "2026-08-31T01:00:00.000Z");
   assert.equal(fake.fields()["nmem-uri"], "nowledgemem://memory/12345678-1234-5123-8123-123456789abc");
+  assert.equal(fake.fields()["nmem-tiddler-digest"], `sha256:${"2".repeat(64)}`);
+  assert.equal(fake.fields()["nmem-local-digest"], undefined);
+  assert.deepEqual(fake.fields().tags, ["alpha"]);
+});
+
+test("reads the tiddler digest with a legacy field fallback", () => {
+  const currentDigest = `sha256:${"1".repeat(64)}`;
+  const legacyDigest = `sha256:${"2".repeat(64)}`;
+  const current = fakeRuntime({
+    ...fields,
+    "nmem-local-digest": legacyDigest,
+    "nmem-tiddler-digest": currentDigest,
+  });
+  const legacy = fakeRuntime({ ...fields, "nmem-local-digest": legacyDigest });
+
+  assert.equal(new TiddlyWikiRepository(current.runtime).get("Hello")?.nmemTiddlerDigest, currentDigest);
+  assert.equal(new TiddlyWikiRepository(legacy.runtime).get("Hello")?.nmemTiddlerDigest, legacyDigest);
 });
 
 test("rejects an update after any concurrent source edit", () => {

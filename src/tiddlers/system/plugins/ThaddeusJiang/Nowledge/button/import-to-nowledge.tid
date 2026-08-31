@@ -17,16 +17,27 @@ type: text/vnd.tiddlywiki
   aria-label="Sync with Nowledge Mem"
   class=<<tv-config-toolbar-class>>
 >
-  {{$:/plugins/ThaddeusJiang/Nowledge/icon/nowledge}}
-  <span class="tw-nowledge-state" data-state=<<nowledgeState>>>
-    <$list filter="[<nowledgeState>match[unlinked]]">＋</$list>
-    <$list filter="[<nowledgeState>match[synced]]">✓</$list>
-    <$list filter="[<nowledgeState>match[local-changed]]">NEW</$list>
-    <$list filter="[<nowledgeState>match[remote-changed]]">OLD</$list>
-    <$list filter="[<nowledgeState>match[conflict]]">!</$list>
-    <$list filter="[<nowledgeState>match[checking]]">…</$list>
-    <$list filter="[<nowledgeState>match[error]]">×</$list>
-  </span>
+  <$list filter="[<nowledgeState>match[unlinked]]">
+    <$image source="$:/plugins/ThaddeusJiang/Nowledge/image/nmem.png" width="22" height="22" class="tc-nowledge-button tc-image-button" />
+  </$list>
+  <$list filter="[<nowledgeState>match[synced]]">
+    <$image source="$:/plugins/ThaddeusJiang/Nowledge/image/nmem-synced.svg" width="22" height="22" class="tc-nowledge-button tc-image-button" />
+  </$list>
+  <$list filter="[<nowledgeState>match[local-changed]]">
+    <$image source="$:/plugins/ThaddeusJiang/Nowledge/image/nmem-push.svg" width="22" height="22" class="tc-nowledge-button tc-image-button" />
+  </$list>
+  <$list filter="[<nowledgeState>match[remote-changed]]">
+    <$image source="$:/plugins/ThaddeusJiang/Nowledge/image/nmem-pull.svg" width="22" height="22" class="tc-nowledge-button tc-image-button" />
+  </$list>
+  <$list filter="[<nowledgeState>match[conflict]]">
+    <$image source="$:/plugins/ThaddeusJiang/Nowledge/image/nmem-conflict.svg" width="22" height="22" class="tc-nowledge-button tc-image-button" />
+  </$list>
+  <$list filter="[<nowledgeState>match[checking]]">
+    <$image source="$:/plugins/ThaddeusJiang/Nowledge/image/nmem.png" width="22" height="22" class="tc-nowledge-button tc-image-button" />
+  </$list>
+  <$list filter="[<nowledgeState>match[error]]">
+    <$image source="$:/plugins/ThaddeusJiang/Nowledge/image/nmem.png" width="22" height="22" class="tc-nowledge-button tc-image-button" />
+  </$list>
   <% if [<tv-config-toolbar-text>match[yes]] %>
     <span class="tc-btn-text">Mem</span>
   <% endif %>

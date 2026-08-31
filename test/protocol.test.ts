@@ -63,12 +63,12 @@ test("builds the importer-compatible native Memory request", async () => {
   });
 });
 
-test("local source digest ignores sync fields but detects source changes", async () => {
+test("local source digest ignores sync fields and the legacy marker but detects source changes", async () => {
   const tiddler: LocalTiddler = {
     created: "2026-08-31T00:00:00.000Z",
     modified: "2026-08-31T01:00:00.000Z",
     nmemDigest: "sha256:" + "1".repeat(64),
-    nmemLocalDigest: "sha256:" + "2".repeat(64),
+    nmemTiddlerDigest: "sha256:" + "2".repeat(64),
     nmemUri: "nowledgemem://memory/12345678-1234-5123-8123-123456789abc",
     revision: "one",
     tags: ["alpha", "$:/NowledgeMem"],
@@ -82,9 +82,10 @@ test("local source digest ignores sync fields but detects source changes", async
     await localSourceDigest({
       ...tiddler,
       nmemDigest: "sha256:" + "3".repeat(64),
-      nmemLocalDigest: "sha256:" + "4".repeat(64),
+      nmemTiddlerDigest: "sha256:" + "4".repeat(64),
     }),
     digest,
   );
+  assert.equal(await localSourceDigest({ ...tiddler, tags: ["alpha"] }), digest);
   assert.notEqual(await localSourceDigest({ ...tiddler, text: "changed" }), digest);
 });

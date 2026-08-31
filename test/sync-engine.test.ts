@@ -28,7 +28,7 @@ function baseTiddler(overrides: Partial<LocalTiddler> = {}): LocalTiddler {
     created: "2026-08-31T00:00:00.000Z",
     modified: "2026-08-31T01:00:00.000Z",
     nmemDigest: "",
-    nmemLocalDigest: "",
+    nmemTiddlerDigest: "",
     nmemUri: "",
     revision: "revision-1",
     tags: ["alpha"],
@@ -81,7 +81,7 @@ class FakeRepository implements TiddlerRepository {
       ...this.current,
       ...patch,
       revision: `revision-${this.patches.length + 1}`,
-      tags: patch.tags ? [...patch.tags] : [...this.current.tags],
+      tags: [...this.current.tags],
     };
     return true;
   }
@@ -143,9 +143,8 @@ async function linkedPair(): Promise<{
   const local = {
     ...unlinked,
     nmemDigest: await memorySyncDigest(memory, destination),
-    nmemLocalDigest: await localSourceDigest(unlinked),
+    nmemTiddlerDigest: await localSourceDigest(unlinked),
     nmemUri: `nowledgemem://memory/${memory.id}`,
-    tags: [...unlinked.tags, "$:/NowledgeMem"],
   };
   return { local, memory, remote: await remoteFor(memory) };
 }
@@ -190,8 +189,9 @@ test("creates a Memory for an unlinked tiddler and records both baselines", asyn
   assert.equal(remote.upserts.length, 1);
   assert.match(repository.current?.nmemUri ?? "", /^nowledgemem:\/\/memory\//u);
   assert.match(repository.current?.nmemDigest ?? "", /^sha256:[0-9a-f]{64}$/u);
-  assert.match(repository.current?.nmemLocalDigest ?? "", /^sha256:[0-9a-f]{64}$/u);
-  assert.ok(repository.current?.tags.includes("$:/NowledgeMem"));
+  assert.match(repository.current?.nmemTiddlerDigest ?? "", /^sha256:[0-9a-f]{64}$/u);
+  assert.deepEqual(repository.current?.tags, ["alpha"]);
+  assert.ok(!Object.hasOwn(repository.patches[0] ?? {}, "tags"));
   assert.equal(repository.current?.modified, "2026-08-31T01:00:00.000Z");
 });
 
@@ -210,7 +210,11 @@ test("does nothing when both sides are unchanged", async () => {
 
 test("classifies an importer-linked legacy mapping without a local baseline", async () => {
   const pair = await linkedPair();
-  const repository = new FakeRepository({ ...pair.local, nmemLocalDigest: "" });
+  const repository = new FakeRepository({
+    ...pair.local,
+    nmemTiddlerDigest: "",
+    tags: [...pair.local.tags, "$:/NowledgeMem"],
+  });
 
   const result = await engine(repository, new FakeRemote(pair.remote)).inspect("Hello");
 
@@ -228,6 +232,24 @@ test("pushes a local-only change to the existing Memory", async () => {
   assert.equal(remote.upserts.length, 1);
   assert.equal(remote.upserts[0]?.id, pair.memory.id);
   assert.equal(repository.patches.length, 1);
+  assert.ok(!Object.hasOwn(repository.patches[0] ?? {}, "tags"));
+});
+
+test("preserves the legacy marker without exporting it as a Memory label", async () => {
+  const pair = await linkedPair();
+  const repository = new FakeRepository({
+    ...pair.local,
+    tags: [...pair.local.tags, "$:/NowledgeMem"],
+    text: "locally changed",
+  });
+  const remote = new FakeRemote(pair.remote);
+
+  const result = await engine(repository, remote).synchronize("Hello");
+
+  assert.equal(result.state, "synced");
+  assert.deepEqual(repository.current?.tags, ["alpha", "$:/NowledgeMem"]);
+  assert.deepEqual(remote.upserts[0]?.labels, ["tiddlywiki", "tiddlywiki-my-wiki", "alpha"]);
+  assert.deepEqual(remote.upserts[0]?.metadata.tiddlywiki_tags, ["alpha"]);
 });
 
 test("does not push a tiddler changed during WikiText conversion", async () => {
@@ -270,6 +292,8 @@ test("pulls a remote-only change into WikiText through md2tid", async () => {
   assert.equal(result.state, "synced");
   assert.equal(repository.current?.text, "converted:# Remote");
   assert.equal(repository.current?.type, "text/vnd.tiddlywiki");
+  assert.deepEqual(repository.current?.tags, ["alpha"]);
+  assert.ok(!Object.hasOwn(repository.patches[0] ?? {}, "tags"));
   assert.equal(remote.upserts.length, 0);
 });
 
@@ -277,13 +301,13 @@ test("pulls a remote-only change verbatim into Markdown", async () => {
   const pair = await linkedPair();
   const markdownLocal = baseTiddler({
     nmemDigest: pair.local.nmemDigest,
-    nmemLocalDigest: "",
+    nmemTiddlerDigest: "",
     nmemUri: pair.local.nmemUri,
     tags: pair.local.tags,
     text: "# Hello",
     type: "text/markdown",
   });
-  markdownLocal.nmemLocalDigest = await localSourceDigest(markdownLocal);
+  markdownLocal.nmemTiddlerDigest = await localSourceDigest(markdownLocal);
   const repository = new FakeRepository(markdownLocal);
   const remote = new FakeRemote({ ...pair.remote, content: "# Remote" });
 

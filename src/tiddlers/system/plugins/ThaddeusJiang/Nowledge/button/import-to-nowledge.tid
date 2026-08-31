@@ -1,35 +1,36 @@
-caption: {{$:/plugins/ThaddeusJiang/Nowledge/icon/nowledge}} import to nowledge
+caption: {{$:/plugins/ThaddeusJiang/Nowledge/icon/nowledge}} Nowledge Mem
 created: 20250810125715658
-description: Import this tiddler to Nowledge
-modified: 20250812071535864
+description: Synchronize this tiddler with Nowledge Mem
+modified: 20260831000000000
 tags: $:/tags/ViewToolbar $:/plugins/ThaddeusJiang/Nowledge
 title: $:/plugins/ThaddeusJiang/Nowledge/button/import-to-nowledge
 type: text/vnd.tiddlywiki
 
-\procedure onCompletion()
-<$action-sendmessage $message="tm-notify" $param="$:/plugins/ThaddeusJiang/Nowledge/text/success"/>
-\end
-
 \whitespace trim
+<% if [<currentTiddler>!is[system]!has[draft.of]] %>
+<$let statusTitle={{{ [<currentTiddler>encodeuricomponent[]addprefix[$:/temp/tw-nowledge/status/]] }}}>
+<$let nowledgeState={{{ [<statusTitle>get[state]else[unlinked]] }}}>
 <$button
-  tooltip="Import to Nowledge"
-	aria-label="Import to Nowledge"
-	class=<<tv-config-toolbar-class>>
-	>
-	<%if [<tv-config-toolbar-icons>match[yes]] %>
-		{{$:/plugins/ThaddeusJiang/Nowledge/icon/nowledge}}
-	<%endif%>
-	<%if [<tv-config-toolbar-text>match[yes]] %>
-		<span class="tc-btn-text">
-			<$text text="import to nowledge"/>
-		</span>
-	<%endif%>
-<$action-sendmessage
-  $message="tm-http-request"
-  url="http://127.0.0.1:14242/memories"
-  method="POST"
-	header-content-type="application/json"
-	oncompletion=<<onCompletion>>
-  body=`{"content":"${ [<currentTiddler>get[text]jsonstringify[]] }$","title":"${ [<currentTiddler>get[title]jsonstringify[]] }$","source":"tiddlywiki","event_start":"${ [<currentTiddler>get[modified]format:date[YYYY-0MM-0DD]] }$","labels":[${ [<currentTiddler>tags[]jsonstringify[]addprefix["]addsuffix["]join[,]] }$]}`
-/>
+  message="tm-nowledge-sync"
+  param=<<currentTiddler>>
+  tooltip={{{ [<statusTitle>get[message]else[Sync with Nowledge Mem]] }}}
+  aria-label="Sync with Nowledge Mem"
+  class=<<tv-config-toolbar-class>>
+>
+  {{$:/plugins/ThaddeusJiang/Nowledge/icon/nowledge}}
+  <span class="tw-nowledge-state" data-state=<<nowledgeState>>>
+    <$list filter="[<nowledgeState>match[unlinked]]">＋</$list>
+    <$list filter="[<nowledgeState>match[synced]]">✓</$list>
+    <$list filter="[<nowledgeState>match[local-changed]]">NEW</$list>
+    <$list filter="[<nowledgeState>match[remote-changed]]">OLD</$list>
+    <$list filter="[<nowledgeState>match[conflict]]">!</$list>
+    <$list filter="[<nowledgeState>match[checking]]">…</$list>
+    <$list filter="[<nowledgeState>match[error]]">×</$list>
+  </span>
+  <% if [<tv-config-toolbar-text>match[yes]] %>
+    <span class="tc-btn-text">Mem</span>
+  <% endif %>
 </$button>
+</$let>
+</$let>
+<% endif %>

@@ -6,6 +6,7 @@
 	  "default-tiddler-location": "../../src/tiddlers"
   },
   "plugins": [
+    "linonetwo/markdown-transformer",
     "tiddlywiki/filesystem",
     "tiddlywiki/tiddlyweb",
     "tiddlywiki/codemirror",

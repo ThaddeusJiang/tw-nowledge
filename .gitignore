@@ -1,4 +1,6 @@
 node_modules/
 npm-debug.log
+output/
 Thumbs.db
 src/tiddlers/system/StoryList.tid
+src/tiddlers/system/plugins/ThaddeusJiang/Nowledge/startup.tid

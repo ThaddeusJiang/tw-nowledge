@@ -1,7 +1,7 @@
 {
   "name": "tw-nowledge",
-  "description": "TiddlyWiki Plugin Nowledge",
-  "version": "0.0.1",
+  "description": "Bidirectional synchronization between TiddlyWiki and Nowledge Mem.",
+  "version": "0.1.0",
   "author": "ThaddeusJiang",
   "license": "MIT",
   "homepage": "https://github.com/ThaddeusJiang/tw-nowledge",
@@ -14,23 +14,31 @@
     "tiddlywiki-plugin",
     "nowledge"
   ],
-  "main": "main.js",
+  "type": "module",
   "scripts": {
-    "dev": "tiddlywiki editions/develop --verbose --listen port=8080",
-    "build": "tiddlywiki editions/release --verbose --build release",
-    "start": "tiddlywiki editions/develop --verbose --listen port=8080 & echo $! > tw.pid",
-    "stop": "kill `cat tw.pid` && rm tw.pid",
-    "winstart": "start \"TW5 Plugin Develop\" cmd /c tiddlywiki editions/develop --verbose --listen port=8080",
-    "winstop": "taskkill /fi \"WINDOWTITLE eq TW5 Plugin Develop\""
+    "dev": "nub scripts/dev.ts",
+    "build": "nub scripts/build.ts",
+    "build:browser-fixture": "nub scripts/build-browser-fixture.ts",
+    "check:plugin": "nub scripts/check-plugin.ts",
+    "test": "nub --test test/*.test.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "tiddlywiki": ">=5.1.20",
-    "tw5-thirdflow": ">=1.2.10"
+    "tiddlywiki": "5.4.1",
+    "turndown": "7.2.4",
+    "turndown-plugin-gfm": "1.0.2",
+    "tw5-thirdflow": "1.2.11"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@nubjs/nub": "0.7.5",
+    "@types/node": "24.13.3",
+    "@types/turndown": "5.0.6",
+    "esbuild": "0.25.9",
+    "typescript": "7.0.2"
+  },
   "bundleDependencies": [],
   "engines": {
-    "node": ">=0.8.2"
+    "node": ">=24.16.0"
   },
   "packageManager": "pnpm@9.15.4"
 }

@@ -1,0 +1,27 @@
+tags: $:/tags/Stylesheet
+title: $:/plugins/ThaddeusJiang/Nowledge/styles
+type: text/css
+
+.tw-nowledge-state {
+  display: inline-block;
+  min-width: 1.6em;
+  margin-left: 0.2em;
+  font-size: 0.72em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+}
+
+.tw-nowledge-state[data-state="synced"] {
+  color: #16803c;
+}
+
+.tw-nowledge-state[data-state="local-changed"],
+.tw-nowledge-state[data-state="remote-changed"] {
+  color: #9a6700;
+}
+
+.tw-nowledge-state[data-state="conflict"],
+.tw-nowledge-state[data-state="error"] {
+  color: #cf222e;
+}

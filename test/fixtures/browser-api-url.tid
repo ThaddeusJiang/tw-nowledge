@@ -1,0 +1,4 @@
+title: $:/config/tw-nowledge/api-url
+type: text/plain
+
+http://127.0.0.1:14243

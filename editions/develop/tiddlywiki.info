@@ -6,6 +6,8 @@
 	  "default-tiddler-location": "../../src/tiddlers"
   },
   "plugins": [
+    "ThaddeusJiang/tw-nowledge-defaults",
+    "linonetwo/markdown-transformer",
     "tiddlywiki/filesystem",
     "tiddlywiki/tiddlyweb",
     "tiddlywiki/codemirror",

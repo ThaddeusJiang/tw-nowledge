@@ -1,0 +1,10 @@
+title: $:/Demo/ThirdPartyNotices
+type: text/vnd.tiddlywiki
+
+! Third-party notices
+
+This standalone demo includes an unmodified copy of [[Markdown Transformer v1.0.0|https://github.com/tiddly-gittly/markdown-transformer/releases/tag/v1.0.0]] by LinOnetwo and Tiddly Gittly. Its upstream repository declares the MIT License.
+
+Markdown Transformer embeds `md-to-tid@0.0.4`. That npm package declares GPL-3.0 while its linked source repository contains an MIT license. Until the upstream metadata is clarified, this demo treats the embedded component conservatively under GPL-3.0.
+
+This notice applies only to the self-contained demo HTML. The separately packaged `Nowledge.tid` does not contain Markdown Transformer or `md-to-tid`; it declares Markdown Transformer as an external TiddlyWiki plugin dependency.

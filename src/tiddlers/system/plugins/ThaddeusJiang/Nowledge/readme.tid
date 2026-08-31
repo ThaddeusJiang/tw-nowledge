@@ -1,13 +1,25 @@
 created: 20250812060149138
-modified: 20260110062843539
+modified: 20260831000000000
 tags:
 title: $:/plugins/ThaddeusJiang/Nowledge/readme
 type: text/vnd.tiddlywiki
 
-! tw-nowledge
+! Nowledge Mem synchronization
 
-Sync TiddlyWiki with Nowledge
+Every saved user tiddler has a Nowledge Mem toolbar button. The button creates a linked Memory, pushes a local-only change, pulls a remote-only change, does nothing when both snapshots are current, and reports a conflict when both sides changed.
 
-!! Usage
+Only tiddlers listed in [[$:/StoryList]] are checked. The plugin does not poll or scan closed tiddlers.
 
-Drag <<tag $:/plugins/ThaddeusJiang/Nowledge >> into your wiki.
+!! Required plugin
+
+Production installs require [[$:/plugins/linonetwo/markdown-transformer]] for WikiText pulls. `tw-nowledge` calls its public `md2tid` library module; `nr dev` and the standalone demo load the verified dependency automatically, while `Nowledge.tid` does not bundle it.
+
+!! Configuration
+
+|Setting | Tiddler | Default |
+|Nowledge Mem API URL | [[$:/config/tw-nowledge/api-url]] | `http://127.0.0.1:14242` |
+|Space ID | [[$:/config/tw-nowledge/space-id]] | `default` |
+|Portable Wiki identity | [[$:/config/tw-nowledge/wiki-id]] | `auto` (derived from the wiki and location) |
+|Temporary API key | [[$:/temp/tw-nowledge/api-key]] | empty |
+
+These defaults are shadow tiddlers. Editing one creates a user override; deleting the override restores the plugin default. The API key tiddler is temporary and must not be persisted. When using `tiddlynmem` and this plugin together, set the same Wiki identity here and pass it to the importer with `--wiki-id`.

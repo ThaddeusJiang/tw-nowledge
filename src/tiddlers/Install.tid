@@ -1,0 +1,37 @@
+created: 20260901000000000
+modified: 20260901000000000
+title: Install
+type: text/vnd.tiddlywiki
+
+! Install tw-nowledge
+
+Open this website and your target TiddlyWiki side by side. Drag each plugin card below by its double-chevron handle into the target wiki, select Import, then save and reload the wiki.
+
+The same drag-and-drop installation works for:
+
+* a static HTML TiddlyWiki;
+* a Node.js TiddlyWiki.
+
+!! 1. Markdown Transformer
+
+Required for WikiText pulls.
+
+<$let plugin-type="plugin"
+	default-popup-state="no"
+	qualified-state=<<qualify "$:/state/install-plugin-info">>
+>
+<$list filter="[[$:/plugins/linonetwo/markdown-transformer]]">
+{{||$:/core/ui/Components/plugin-info}}
+</$list>
+</$let>
+
+!! 2. tw-nowledge
+
+<$let plugin-type="plugin"
+	default-popup-state="no"
+	qualified-state=<<qualify "$:/state/install-plugin-info">>
+>
+<$list filter="[[$:/plugins/ThaddeusJiang/Nowledge]]">
+{{||$:/core/ui/Components/plugin-info}}
+</$list>
+</$let>

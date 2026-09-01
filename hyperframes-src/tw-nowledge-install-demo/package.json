@@ -1,0 +1,14 @@
+{
+  "name": "tw-nowledge-install-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "preview": "npx --yes hyperframes@0.8.22 preview",
+    "check": "npx --yes hyperframes@0.8.22 check --at-transitions",
+    "snapshot": "npx --yes hyperframes@0.8.22 snapshot --at 0,1.9,2.2,4.8,8.2,12.0,16.8,18.8 --no-end --output output/review",
+    "render": "npm run render:video && npm run render:poster && npm run render:gif",
+    "render:video": "npx --yes hyperframes@0.8.22 render --quality high --strict --output output/publish/tw-nowledge-install-demo.mp4",
+    "render:poster": "ffmpeg -hide_banner -loglevel error -y -i output/publish/tw-nowledge-install-demo.mp4 -ss 1.0 -frames:v 1 output/publish/poster.png",
+    "render:gif": "ffmpeg -hide_banner -loglevel error -y -i output/publish/tw-nowledge-install-demo.mp4 -filter_complex \"[0:v]fps=10,scale=860:-2:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=128:stats_mode=diff[p];[s1][p]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle\" -loop 0 output/publish/tw-nowledge-install-demo.gif"
+  }
+}

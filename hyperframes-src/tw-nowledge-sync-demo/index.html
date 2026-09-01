@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ink: #0d1731;
+        --muted: #6f7890;
+        --blue: #2365e8;
+        --cyan: #00a7e1;
+        --green: #16a34a;
+        --red: #e5484d;
+        --paper: #f7f9fd;
+        --line: rgba(19, 35, 71, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #eef3fb;
+      }
+
+      body {
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+        text-rendering: geometricPrecision;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 86% 12%, rgba(35, 101, 232, 0.18), transparent 30%),
+          radial-gradient(circle at 9% 88%, rgba(0, 167, 225, 0.16), transparent 34%),
+          linear-gradient(145deg, #fbfcff 0%, #eff4fb 62%, #e8f1fb 100%);
+      }
+
+      #root::before {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(26, 57, 113, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(26, 57, 113, 0.035) 1px, transparent 1px);
+        background-size: 72px 72px;
+        content: "";
+        mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent 92%);
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-columns: 620px minmax(0, 1fr);
+        gap: 62px;
+        align-items: center;
+        padding: 82px 84px;
+        opacity: 0;
+      }
+
+      .brand {
+        position: absolute;
+        top: 58px;
+        left: 84px;
+        z-index: 4;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .brand-logo {
+        display: block;
+        width: 56px;
+        height: 56px;
+        border-radius: 15px;
+        background: url("assets/nmem.png") center / cover no-repeat;
+        box-shadow: 0 14px 32px rgba(31, 74, 145, 0.22);
+      }
+
+      .brand-name {
+        font-size: 27px;
+        font-weight: 730;
+        letter-spacing: -0.025em;
+      }
+
+      .copy {
+        position: relative;
+        z-index: 4;
+        padding-top: 72px;
+      }
+
+      .eyebrow {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 28px;
+        color: var(--blue);
+        font-size: 19px;
+        font-weight: 760;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        width: 46px;
+        height: 3px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--blue), var(--cyan));
+        content: "";
+      }
+
+      h1 {
+        max-width: 620px;
+        font-size: 70px;
+        font-weight: 690;
+        letter-spacing: -0.052em;
+        line-height: 1.01;
+      }
+
+      h1 em {
+        color: var(--blue);
+        font-style: normal;
+      }
+
+      .lede {
+        max-width: 570px;
+        margin-top: 30px;
+        color: var(--muted);
+        font-size: 27px;
+        font-weight: 460;
+        letter-spacing: -0.018em;
+        line-height: 1.42;
+      }
+
+      .state-chip {
+        display: inline-flex;
+        gap: 14px;
+        align-items: center;
+        margin-top: 34px;
+        padding: 12px 18px 12px 13px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.82);
+        box-shadow: 0 12px 32px rgba(38, 70, 124, 0.1);
+        color: #3b4660;
+        font-size: 18px;
+        font-weight: 680;
+      }
+
+      .state-chip img {
+        width: 42px;
+        height: 42px;
+      }
+
+      .nmem-mark {
+        display: block;
+        width: 42px;
+        height: 42px;
+        background: url("assets/nmem.png") center / cover no-repeat;
+      }
+
+      .stage {
+        position: relative;
+        z-index: 3;
+        height: 736px;
+      }
+
+      .window {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border: 1px solid rgba(24, 54, 105, 0.14);
+        border-radius: 28px;
+        background: #fff;
+        box-shadow: 0 38px 110px rgba(36, 67, 118, 0.2);
+      }
+
+      .window-bar {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 4;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        height: 52px;
+        padding: 0 22px;
+        border-bottom: 1px solid rgba(18, 40, 80, 0.09);
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(18px);
+      }
+
+      .traffic {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      .traffic.red { background: #ff625d; }
+      .traffic.yellow { background: #ffc043; }
+      .traffic.green { background: #36c66b; }
+
+      .window-title {
+        margin-left: 12px;
+        color: #6b7488;
+        font-size: 17px;
+        font-weight: 650;
+        white-space: nowrap;
+      }
+
+      .nowrap {
+        white-space: nowrap;
+      }
+
+      .screen {
+        position: absolute;
+        top: 52px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        overflow: hidden;
+        background: #f7f7f7;
+      }
+
+      .screen video {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .screen.browser video {
+        object-position: center center;
+      }
+
+      .screen.create {
+        background: #f7f7f7 url("assets/create-memory-start.png") center / cover no-repeat;
+      }
+
+      .screen.native video {
+        object-position: center center;
+      }
+
+      .proof {
+        position: absolute;
+        right: 28px;
+        bottom: 28px;
+        z-index: 6;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 13px 17px;
+        border: 1px solid rgba(255, 255, 255, 0.78);
+        border-radius: 17px;
+        background: rgba(13, 23, 49, 0.84);
+        box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+        color: #fff;
+        font-size: 16px;
+        font-weight: 680;
+        backdrop-filter: blur(20px);
+      }
+
+      .proof::before {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 0 6px rgba(22, 163, 74, 0.15);
+        content: "";
+      }
+
+      .conflict .eyebrow,
+      .conflict h1 em {
+        color: var(--red);
+      }
+
+      .conflict .eyebrow::before {
+        background: var(--red);
+      }
+
+      .conflict .proof::before {
+        background: var(--red);
+        box-shadow: 0 0 0 6px rgba(229, 72, 77, 0.16);
+      }
+
+      .outro {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        opacity: 0;
+      }
+
+      .outro-lockup {
+        display: grid;
+        justify-items: center;
+        width: 100%;
+        max-width: 1280px;
+        text-align: center;
+      }
+
+      .outro-lockup img {
+        width: 138px;
+        height: 138px;
+        filter: drop-shadow(0 24px 38px rgba(31, 74, 145, 0.24));
+      }
+
+      .outro-title {
+        margin-top: 26px;
+        font-size: 72px;
+        font-weight: 720;
+        letter-spacing: -0.055em;
+        white-space: nowrap;
+      }
+
+      .outro-subtitle {
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 29px;
+        line-height: 1.35;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="tw-nowledge-sync-demo"
+      data-start="0"
+      data-duration="19.2"
+      data-width="1920"
+      data-height="1080"
+      data-fps="30"
+    >
+      <section id="create" class="scene">
+        <div class="brand"><span class="brand-logo"></span><span class="brand-name">tw-nowledge</span></div>
+        <div class="copy">
+          <div class="eyebrow">01 / Create</div>
+          <h1>One click creates<br />a <em>linked Memory.</em></h1>
+          <p class="lede">The tiddler keeps the URI and synchronization digests needed for future checks.</p>
+          <div class="state-chip"><span class="nmem-mark"></span><span>Not linked → synced</span></div>
+        </div>
+        <div class="stage">
+          <div class="window">
+            <div class="window-bar"><span class="traffic red"></span><span class="traffic yellow"></span><span class="traffic green"></span><span class="window-title">TiddlyWiki</span></div>
+            <div class="screen browser create">
+              <video id="create-memory-video" src="assets/create-memory.webm" poster="assets/create-memory-start.png" data-start="2" data-duration="3.2" data-media-start="4.4" data-playback-rate="2" data-track-index="0" muted playsinline></video>
+            </div>
+          </div>
+          <div class="proof">Real browser interaction</div>
+        </div>
+      </section>
+
+      <section id="push" class="scene">
+        <div class="brand"><span class="brand-logo"></span><span class="brand-name">tw-nowledge</span></div>
+        <div class="copy">
+          <div class="eyebrow">02 / Push</div>
+          <h1>TiddlyWiki changed.<br /><em>Memory catches up.</em></h1>
+          <p class="lede">Only the local side changed, so the same linked Memory is updated in place.</p>
+          <div class="state-chip"><img src="assets/nmem-push.svg" alt="" /><span>Tiddler is newer</span></div>
+        </div>
+        <div class="stage">
+          <div class="window">
+            <div class="window-bar"><span class="traffic red"></span><span class="traffic yellow"></span><span class="traffic green"></span><span class="window-title">TiddlyWiki</span></div>
+            <div class="screen browser">
+              <video id="push-from-tiddlywiki-video" src="assets/push-from-tiddlywiki.webm" data-start="5.2" data-duration="3.2" data-media-start="44" data-playback-rate="2" data-track-index="0" muted playsinline></video>
+            </div>
+          </div>
+          <div class="proof">Same Memory ID preserved</div>
+        </div>
+      </section>
+
+      <section id="remote-edit" class="scene">
+        <div class="brand"><span class="brand-logo"></span><span class="brand-name">tw-nowledge</span></div>
+        <div class="copy">
+          <div class="eyebrow">03 / Remote edit</div>
+          <h1>Edit in <span class="nowrap">Nowledge Mem</span>.<br /><em>The link stays live.</em></h1>
+          <p class="lede">The native app updates the same Memory. No browser-only simulation and no duplicated record.</p>
+          <div class="state-chip"><span class="nmem-mark"></span><span>Recorded with CUA Driver</span></div>
+        </div>
+        <div class="stage">
+          <div class="window">
+            <div class="window-bar"><span class="traffic red"></span><span class="traffic yellow"></span><span class="traffic green"></span><span class="window-title">Nowledge Mem</span></div>
+            <div class="screen native">
+              <video id="edit-in-nowledge-video" src="assets/edit-in-nowledge.mp4" data-start="8.4" data-duration="3.2" data-media-start="73" data-playback-rate="5" data-track-index="0" muted playsinline></video>
+            </div>
+          </div>
+          <div class="proof">Real native app interaction</div>
+        </div>
+      </section>
+
+      <section id="pull" class="scene">
+        <div class="brand"><span class="brand-logo"></span><span class="brand-name">tw-nowledge</span></div>
+        <div class="copy">
+          <div class="eyebrow">04 / Pull</div>
+          <h1>Memory changed.<br /><em>The tiddler catches up.</em></h1>
+          <p class="lede">Only the remote side changed, so the active tiddler pulls the new content and returns to green.</p>
+          <div class="state-chip"><img src="assets/nmem-pull.svg" alt="" /><span>Memory is newer</span></div>
+        </div>
+        <div class="stage">
+          <div class="window">
+            <div class="window-bar"><span class="traffic red"></span><span class="traffic yellow"></span><span class="traffic green"></span><span class="window-title">TiddlyWiki</span></div>
+            <div class="screen browser">
+              <video id="pull-from-nowledge-video" src="assets/pull-from-nowledge.webm" data-start="11.6" data-duration="3.2" data-media-start="48" data-playback-rate="3" data-track-index="0" muted playsinline></video>
+            </div>
+          </div>
+          <div class="proof">Format and link preserved</div>
+        </div>
+      </section>
+
+      <section id="conflict" class="scene conflict">
+        <div class="brand"><span class="brand-logo"></span><span class="brand-name">tw-nowledge</span></div>
+        <div class="copy">
+          <div class="eyebrow">05 / Conflict</div>
+          <h1>Both sides changed.<br /><em>Nothing is overwritten.</em></h1>
+          <p class="lede">The button turns red and reports a conflict. The plugin waits for a human decision.</p>
+          <div class="state-chip"><img src="assets/nmem-conflict.svg" alt="" /><span>Conflict requires review</span></div>
+        </div>
+        <div class="stage">
+          <div class="window">
+            <div class="window-bar"><span class="traffic red"></span><span class="traffic yellow"></span><span class="traffic green"></span><span class="window-title">TiddlyWiki</span></div>
+            <div class="screen browser">
+              <video id="conflict-video" src="assets/conflict.webm" data-start="14.8" data-duration="2.8" data-media-start="0" data-track-index="0" muted playsinline></video>
+            </div>
+          </div>
+          <div class="proof">No automatic overwrite</div>
+        </div>
+      </section>
+
+      <section id="outro" class="clip outro" data-start="17.6" data-duration="1.6" data-track-index="1">
+        <div class="outro-lockup">
+          <img src="assets/nmem-synced.svg" alt="" />
+          <div class="outro-title">TiddlyWiki ↔ Nowledge Mem</div>
+          <div class="outro-subtitle">Create. Push. Pull. Detect conflicts.<br />Only active tiddlers are checked.</div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.set("#create", { opacity: 1 }, 0);
+      tl.to("#create", { opacity: 0, duration: 0.22 }, 4.98);
+
+      tl.fromTo("#push", { opacity: 0 }, { opacity: 1, duration: 0.22 }, 5.2);
+      tl.fromTo("#push .copy", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 5.28);
+      tl.fromTo("#push .window", { opacity: 0, x: 50 }, { opacity: 1, x: 0, duration: 0.48, ease: "power3.out" }, 5.28);
+      tl.to("#push", { opacity: 0, duration: 0.22 }, 8.18);
+
+      tl.fromTo("#remote-edit", { opacity: 0 }, { opacity: 1, duration: 0.22 }, 8.4);
+      tl.fromTo("#remote-edit .copy", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 8.48);
+      tl.fromTo("#remote-edit .window", { opacity: 0, x: 50 }, { opacity: 1, x: 0, duration: 0.48, ease: "power3.out" }, 8.48);
+      tl.to("#remote-edit", { opacity: 0, duration: 0.22 }, 11.38);
+
+      tl.fromTo("#pull", { opacity: 0 }, { opacity: 1, duration: 0.22 }, 11.6);
+      tl.fromTo("#pull .copy", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 11.68);
+      tl.fromTo("#pull .window", { opacity: 0, x: 50 }, { opacity: 1, x: 0, duration: 0.48, ease: "power3.out" }, 11.68);
+      tl.to("#pull", { opacity: 0, duration: 0.22 }, 14.58);
+
+      tl.fromTo("#conflict", { opacity: 0 }, { opacity: 1, duration: 0.22 }, 14.8);
+      tl.fromTo("#conflict .copy", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 14.88);
+      tl.fromTo("#conflict .window", { opacity: 0, x: 50 }, { opacity: 1, x: 0, duration: 0.48, ease: "power3.out" }, 14.88);
+      tl.to("#conflict", { opacity: 0, duration: 0.22 }, 17.38);
+      tl.set("#conflict", { opacity: 0 }, 17.6);
+
+      tl.fromTo("#outro", { opacity: 0 }, { opacity: 1, duration: 0.24 }, 17.6);
+      tl.fromTo("#outro img", { opacity: 0, scale: 0.72, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 0.46, ease: "power3.out" }, 17.68);
+      tl.fromTo("#outro .outro-title", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.38 }, 17.86);
+      tl.fromTo("#outro .outro-subtitle", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.36 }, 18.02);
+
+      window.__timelines["tw-nowledge-sync-demo"] = tl;
+    </script>
+  </body>
+</html>

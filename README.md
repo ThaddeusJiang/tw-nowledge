@@ -2,6 +2,16 @@
 
 `tw-nowledge` is a standalone TiddlyWiki plugin for bidirectional synchronization with [Nowledge Mem](https://mem.nowledge.co/). It can be used by itself or alongside the independent [`tiddlynmem`](https://github.com/nowledge-co/tiddlynmem) importer.
 
+## Demo
+
+<p align="center">
+  <a href="hyperframes-src/tw-nowledge-sync-demo/output/publish/tw-nowledge-sync-demo.mp4">
+    <img src="hyperframes-src/tw-nowledge-sync-demo/output/publish/tw-nowledge-sync-demo.gif" width="860" alt="tw-nowledge bidirectional synchronization demo">
+  </a>
+</p>
+
+The demo shows Memory creation, changes in both directions, and conflict detection. Select the preview to watch the full-quality MP4.
+
 ## Behavior
 
 Every saved, non-system tiddler has a Nowledge Mem toolbar button:

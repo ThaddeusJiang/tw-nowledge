@@ -5,12 +5,41 @@
 ## Demo
 
 <p align="center">
-  <a href="hyperframes-src/tw-nowledge-sync-demo/output/publish/tw-nowledge-sync-demo.mp4">
-    <img src="hyperframes-src/tw-nowledge-sync-demo/output/publish/tw-nowledge-sync-demo.gif" width="860" alt="tw-nowledge bidirectional synchronization demo">
+  <a href="docs/assets/tw-nowledge-sync-demo.mp4">
+    <img src="docs/assets/tw-nowledge-sync-demo.gif" width="860" alt="tw-nowledge bidirectional synchronization demo">
   </a>
 </p>
 
 The demo shows Memory creation, changes in both directions, and conflict detection. Select the preview to watch the full-quality MP4.
+
+## Install
+
+Open the [tw-nowledge website](https://thaddeusjiang.github.io/tw-nowledge/) and your target TiddlyWiki side by side. The same drag-and-drop installation works for both a static HTML TiddlyWiki and a Node.js TiddlyWiki.
+
+1. Drag the Markdown Transformer card by its double-chevron handle into your wiki, then select **Import**.
+2. Drag the `tw-nowledge` card into your wiki, then select **Import**.
+3. Save and reload the wiki. A Node.js TiddlyWiki saves the imported tiddlers through its server; a static HTML TiddlyWiki uses its normal save button.
+
+<p align="center">
+  <a href="docs/assets/tw-nowledge-install-demo.mp4">
+    <img src="docs/assets/tw-nowledge-install-demo.gif" width="860" alt="Install tw-nowledge by dragging the plugin cards into a TiddlyWiki">
+  </a>
+</p>
+
+Select the preview to watch the full-quality MP4. The published website opens this installation page by default.
+
+## Configure
+
+The plugin provides these defaults as shadow tiddlers. Click a title to inspect it in TiddlyWiki. Editing creates a user override; deleting that override restores the plugin default.
+
+| Tiddler | Default |
+| --- | --- |
+| `$:/config/tw-nowledge/api-url` | `http://127.0.0.1:14242` |
+| `$:/config/tw-nowledge/space-id` | `default` |
+| `$:/config/tw-nowledge/wiki-id` | `auto` (derived from the wiki and browser location) |
+| `$:/temp/tw-nowledge/api-key` | Empty; temporary only |
+
+Never persist the API key tiddler. When using the importer and plugin together, use the same Wiki identity here and with `tiddlynmem plan --wiki-id <id>`.
 
 ## Behavior
 
@@ -35,26 +64,6 @@ The plugin records `nmem-uri` and `nmem-digest`, using the same Memory request a
 - `text/plain` remains plain text.
 
 WikiText pulls use the community [`$:/plugins/linonetwo/markdown-transformer`](https://github.com/tiddly-gittly/markdown-transformer) plugin and call its public `md2tid` module. The production `Nowledge.tid` keeps this as an external plugin dependency; the standalone demo HTML embeds a verified upstream release so it works without a separate import.
-
-## Install and configure
-
-Build the plugin, then install Markdown Transformer and drag `editions/release/output/Nowledge.tid` into your TiddlyWiki:
-
-```bash
-ni
-nr build
-```
-
-The plugin provides these defaults as shadow tiddlers. Click a title to inspect it in TiddlyWiki. Editing creates a user override; deleting that override restores the plugin default.
-
-| Tiddler | Default |
-| --- | --- |
-| `$:/config/tw-nowledge/api-url` | `http://127.0.0.1:14242` |
-| `$:/config/tw-nowledge/space-id` | `default` |
-| `$:/config/tw-nowledge/wiki-id` | `auto` (derived from the wiki and browser location) |
-| `$:/temp/tw-nowledge/api-key` | Empty; temporary only |
-
-Never persist the API key tiddler. When using the importer and plugin together, use the same Wiki identity here and with `tiddlynmem plan --wiki-id <id>`.
 
 ## Develop with Node.js TiddlyWiki
 

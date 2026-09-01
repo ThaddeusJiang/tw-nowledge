@@ -1,6 +1,0 @@
-node_modules/
-!output/
-output/*
-!output/publish/
-!output/publish/**
-output/review/

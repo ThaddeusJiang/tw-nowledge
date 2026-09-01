@@ -140,6 +140,26 @@ assert.match(
   /\$:\/Demo\/ThirdPartyNotices/u,
   "The demo HTML must include its third-party notice.",
 );
+assert.match(
+  demoHtml,
+  /\{"title":"\$:\/DefaultTiddlers"[^}]*"text":"Install\\n"/u,
+  "The published website must open the installation tiddler by default.",
+);
+assert.match(
+  demoHtml,
+  /"title":"Install"/u,
+  "The published website must include installation instructions.",
+);
+assert.match(
+  demoHtml,
+  /\[\[\$:\/plugins\/linonetwo\/markdown-transformer\]\]/u,
+  "The installation page must expose the required Markdown Transformer plugin card.",
+);
+assert.match(
+  demoHtml,
+  /\[\[\$:\/plugins\/ThaddeusJiang\/Nowledge\]\]/u,
+  "The installation page must expose the tw-nowledge plugin card.",
+);
 
 const pluginLibrary = await prepareMarkdownTransformerLibrary();
 const developmentPlugin = JSON.parse(
